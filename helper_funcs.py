@@ -23,9 +23,6 @@ def process(file):
     chat = file.read().decode('utf-8')
     #chat = file.read().decode('utf-8')
     chat = chat.splitlines()
-    print('Length of Chat: {}\n'.format(len(chat)))
-    print('\n'.join(chat[:10]))
-   
     new_chat = []
     temp = ''
     for i in range(len(chat)):
@@ -93,8 +90,17 @@ def process(file):
             data[year]["months"][month]["days"][day]["hours"][hour] = {"total_words":words}
         else:
             data[year]["months"][month]["days"][day]["hours"][hour]["total_words"] += words
+            
+    
+    maxvalyear = data[max(data,key=lambda x:data[x]["total_words"])]["total_words"]
+  
+    for year in data.keys():
+        temp = data[year]["months"]
+        month = max(temp,key=lambda x: temp[x]["total_words"])
+        maxvalmonth = temp[month]["total_words"]
+        data[year]["maxval"] = maxvalmonth
       
-    return {"data":data,"corpus":all_text}
+    return {"data":data,"corpus":all_text,"maxval":maxvalyear}
 
 
 def topics(words,corpus):

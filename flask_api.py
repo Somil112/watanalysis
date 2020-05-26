@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, request
 import json
 from flask_cors import CORS
 from helper_funcs import process,topics
