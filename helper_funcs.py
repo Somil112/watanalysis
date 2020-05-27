@@ -55,31 +55,38 @@ def process(file):
     
     # for i in range(len(chat)):
     data = {}
-    
+    temp = {}
     all_text = []
     for i in range(1,len(chat)):
         ts = datetime.strptime(chat[i].split('-',1)[0].strip(),"%d/%m/%y, %I:%M %p")
         unprocessed_text = chat[i].split('-',1)[1].strip().split(':',1)[1]
         
-        text,words = preprocess(unprocessed_text)
-        all_text += text
-        
+        # Calculating Word Frequency of Each Chat
+        words = len(unprocessed_text.split(' '))
+#        text = preprocess(unprocessed_text)
+#        all_text += text
+        """
+        RESTRUCTURE CODE SUCH THAT THE PREPROCESS FUNCTION IS CALLED THE LEAST NO OF TIMES
+        """
         year = str(datetime.strftime(ts,"%Y"))
         month = datetime.strftime(ts,"%B")
         day = str(datetime.strftime(ts,"%d"))
         hour = str(datetime.strftime(ts,"%H"))
     
+        
         if year not in data.keys():
-            data[year] = {"total_words": words,"months":{},"all_words": text}
+            data[year] = {"total_words": words,"months":{},"all_words": []}
+            temp[year] = {"text":unprocessed_text,"months":{}}
         else:
             data[year]["total_words"] += words
-            data[year]["all_words"] += text
+            temp[year]["text"] += unprocessed_text
         
         if month not in data[year]["months"].keys():
-            data[year]["months"][month] = {"total_words":words,"days":{},"all_words":text}
+            data[year]["months"][month] = {"total_words":words,"days":{},"all_words":[]}
+            temp[year]["months"][month] = {"text":unprocessed_text}
         else:
             data[year]["months"][month]["total_words"] += words
-            data[year]["months"][month]["all_words"] += text
+            temp[year]["months"][month]["text"] += unprocessed_text
             
         if day not in data[year]["months"][month]["days"].keys():
             data[year]["months"][month]["days"][day] = {"total_words":words,"hours":create_empty_hours()}
@@ -92,13 +99,25 @@ def process(file):
             data[year]["months"][month]["days"][day]["hours"][hour]["total_words"] += words
             
     
+    
     maxvalyear = data[max(data,key=lambda x:data[x]["total_words"])]["total_words"]
-  
-    for year in data.keys():
-        temp = data[year]["months"]
-        month = max(temp,key=lambda x: temp[x]["total_words"])
-        maxvalmonth = temp[month]["total_words"]
+    
+    all_text = []
+    
+    for year in list(data.keys()):
+        ywords = []
+        for month in data[year]["months"].keys():
+            mwords = preprocess(temp[year]["months"][month]["text"]) 
+            data[year]["months"][month]["all_words"] = mwords
+            ywords += mwords
+        data[year]["all_words"] = ywords
+        all_text += ywords
+    
+        temp2 = data[year]["months"]
+        month = max(temp2,key=lambda x: temp2[x]["total_words"])
+        maxvalmonth = temp2[month]["total_words"]
         data[year]["maxval"] = maxvalmonth
+        
       
     return {"data":data,"corpus":all_text,"maxval":maxvalyear}
 

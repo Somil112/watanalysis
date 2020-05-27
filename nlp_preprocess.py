@@ -8,6 +8,8 @@ demoji.download_codes()
 import numpy as np
 from hinglish_stopwords import get_hinglish_stopwords
 
+
+
 import spacy
 nlp = spacy.load("en_core_web_sm")
 
@@ -86,9 +88,8 @@ def unique_list(l):
     return ulist
 
 
-def preprocess(data):
+def preprocess(data): 
     data = convert_lower_case(data)
-    length = len(str(data).strip().split(' '))
     data = remove_punctuation(data) #remove comma seperately
     data = remove_apostrophe(data)
     data = remove_stop_words(data)
@@ -98,5 +99,4 @@ def preprocess(data):
     data = lemmatize(data)
     data = demoji.replace(str(data).strip(),'')
     data = spacy_preprocess(data)
-    
-    return [data,length]
+    return data
