@@ -1,0 +1,11 @@
+Flask==1.1.1
+gensim==3.8.1
+Flask_Cors==3.0.8
+numpy==1.17.4
+demoji==0.2.1
+pandas==0.25.0
+spacy==2.2.1
+matplotlib==3.1.1
+nltk==3.4.5
+num2words==0.5.10
+gunicorn
