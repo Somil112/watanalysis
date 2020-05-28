@@ -41,5 +41,6 @@ def gen_topics():
     return Response(json.dumps({"data":gentopics}),status=200,mimetype="application/json")
     
 if __name__ == "__main__":
-    app.run(port=4555,debug=True)
+    app.run(host="0.0.0.0",debug=True)
+
     
