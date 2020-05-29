@@ -20,11 +20,11 @@ def upload():
     """
     file = request.files['file']
     a = time()
-#    try:
-    data = process(file)
-#    except:
-#        
-#        return Response("",status=500)
+    try:
+        data = process(file)
+    except Exception as e:
+        print(e)
+        return Response("",status=500)
     b = time()
     print("TOTAL TIME TAKEN is {}".format(b-a))
     return Response(json.dumps(data),status=200,mimetype="application/json")
