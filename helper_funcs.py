@@ -47,7 +47,6 @@ def process(file):
     for i in range(1,len(chat)):
         try:
             temp = chat[i].split('-',1)[1].strip().split(':',1)[1]
-            print(temp)
             clean_chat.append(chat[i])
         except:
             pass
@@ -72,13 +71,8 @@ def process(file):
         ts = datetime.strptime(chat[i].split('-',1)[0].strip(),dateformat[choice])
         unprocessed_text = chat[i].split('-',1)[1].strip().split(':',1)[1]
         
-        # Calculating Word Frequency of Each Chat
         words = len(unprocessed_text.split(' '))
-    #        text = preprocess(unprocessed_text)
-    #        all_text += text
-        """
-        RESTRUCTURE CODE SUCH THAT THE PREPROCESS FUNCTION IS CALLED THE LEAST NO OF TIMES
-        """
+
         year = str(datetime.strftime(ts,"%Y"))
         month = datetime.strftime(ts,"%B")
         day = str(datetime.strftime(ts,"%d"))
@@ -109,7 +103,6 @@ def process(file):
         else:
             data[year]["months"][month]["days"][day]["hours"][hour]["total_words"] += words
             
-    print(data)
     bestyear = max(data,key=lambda x:data[x]["total_words"])
     
     maxvalyear = data[bestyear]["total_words"]

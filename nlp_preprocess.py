@@ -17,15 +17,8 @@ nlp = spacy.load("en_core_web_sm")
 def convert_lower_case(data):
     return np.char.lower(data)
 
-# Removing Stop Words
-def remove_stop_words(data):
-    stop_words = stopwords.words('english') + get_hinglish_stopwords()
-    words = word_tokenize(str(data))
-    new_text = ""
-    for w in words:
-        if w not in stop_words and len(w) > 1:
-            new_text = new_text + " " + w
-    return new_text
+def remove_media_omit(data):
+    return np.char.replace(str(data),"<media omitted>","")
 
 # Remove Punctuations
 def remove_punctuation(data):
@@ -40,35 +33,43 @@ def remove_punctuation(data):
 def remove_apostrophe(data):
     return np.char.replace(data, "'", "")
 
-# Stemming
-def stemming(data):
-    stemmer= PorterStemmer()
-    tokens = word_tokenize(str(data))
-    new_text = ""
-    for w in tokens:
-        new_text = new_text + " " + stemmer.stem(w)
-    return new_text
 
 
-def lemmatize(data):
-    lemmatizer = WordNetLemmatizer()
-    tokens = word_tokenize(str(data))
-    new_text = ""
-    for w in tokens:
-        new_text = new_text + " " + lemmatizer.lemmatize(w)
-        
-    return new_text
+# Removing Stop Words
+def remove_stop_words(data):
+    stop_words = stopwords.words('english') + get_hinglish_stopwords()
+    if isinstance(data,list):
+        tokens = []
+        for w in data:
+            if w not in stop_words and len(w) > 1:
+                tokens.append(w)
+        return tokens
+    else:
+        words = word_tokenize(str(data))
+        tokens = []
+        for w in words:
+            if w not in stop_words and len(w) > 1:
+                tokens.append(w)
+        return tokens
 
-def convert_numbers(data):
-    tokens = word_tokenize(str(data))
-    new_text = ""
+def convert_numbers(tokens):
+    new = []
     for w in tokens:
         try:
             w = num2words(int(w))
         except:
             a = 0
-        new_text = new_text + " " + w
-    new_text = np.char.replace(new_text, "-", " ")
+        new.append(w)
+#    new_text = np.char.replace(new_text, "-", " ")
+    return new
+
+
+def lemmatize(data):
+    lemmatizer = WordNetLemmatizer()
+    new_text = ""
+    for w in data:
+        new_text = new_text + " " + lemmatizer.lemmatize(w)
+        
     return new_text
 
 
@@ -82,21 +83,18 @@ def spacy_preprocess(text):
 
     return jd
 
-def unique_list(l):
-    ulist = []
-    [ulist.append(x) for x in l if x not in ulist]
-    return ulist
 
 
 def preprocess(data): 
     data = convert_lower_case(data)
+    data = remove_media_omit(data)
     data = remove_punctuation(data) #remove comma seperately
     data = remove_apostrophe(data)
     data = remove_stop_words(data)
     data = convert_numbers(data)
-    data = remove_punctuation(data)
     data = remove_stop_words(data) #needed again as num2word is giving stop words 101 - one hundred and one
     data = lemmatize(data)
+    data = remove_punctuation(data)
     data = demoji.replace(str(data).strip(),'')
     data = spacy_preprocess(data)
     return data
