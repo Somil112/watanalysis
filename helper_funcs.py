@@ -98,12 +98,12 @@ def process(file):
         else:
             data[year]["months"][month]["days"][day]["hours"][hour]["total_words"] += words
             
+    bestyear = max(data,key=lambda x:data[x]["total_words"])
     
-    
-    maxvalyear = data[max(data,key=lambda x:data[x]["total_words"])]["total_words"]
+    maxvalyear = data[bestyear]["total_words"]
     
     all_text = []
-    
+    bestmonths = []
     for year in list(data.keys()):
         ywords = []
         for month in data[year]["months"].keys():
@@ -116,10 +116,11 @@ def process(file):
         temp2 = data[year]["months"]
         month = max(temp2,key=lambda x: temp2[x]["total_words"])
         maxvalmonth = temp2[month]["total_words"]
+        bestmonths.append({"year":year,"month":month,"value":maxvalmonth})
         data[year]["maxval"] = maxvalmonth
         
       
-    return {"data":data,"corpus":all_text,"maxval":maxvalyear}
+    return {"data":data,"corpus":all_text,"maxval":maxvalyear,"best_year":{"year":bestyear,"value":maxvalyear},"best_months":bestmonths}
 
 
 def topics(words,corpus):
