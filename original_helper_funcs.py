@@ -23,16 +23,13 @@ def process(file):
     chat = file.read().decode('utf-8')
     #chat = file.read().decode('utf-8')
     chat = chat.splitlines()
-    
     new_chat = []
-    temp = None
+    temp = ''
     for i in range(len(chat)):
-        
-        if (re.match(r'(^\d\/\d\d\/\d\d)|(^\d\d\/\d\d\/\d\d)',chat[i]) and temp is None):
-            
-            
+        if (re.match(r'^\d\d\/\d\d\/\d\d',chat[i]) and (temp is None)):
+            # Initialize Temp
             temp = chat[i]
-        elif (re.match(r'(^\d\/\d\d\/\d\d)|(^\d\d\/\d\d\/\d\d)',chat[i]) and temp is not None):
+        elif (re.match(r'^\d\d\/\d\d\/\d\d',chat[i]) and (temp is not None)):
             
             # Append Temp to Chat and Initialize new Temp with current Chat
             new_chat.append(temp)
@@ -40,42 +37,34 @@ def process(file):
         else:
             temp += chat[i]
             
-    
     chat = new_chat
     
     clean_chat = []
     for i in range(1,len(chat)):
         try:
             temp = chat[i].split('-',1)[1].strip().split(':',1)[1]
-            print(temp)
             clean_chat.append(chat[i])
         except:
             pass
-
+#            print("Removed {}".format(chat[i]))
             
     chat = clean_chat
-    
-    dateformat = ['%d/%m/%y, %I:%M %p','%m/%d/%y, %I:%M %p']
-    choice = None
-    for i in range(200):
-        if int(chat[i].split('-',1)[0].strip().split(',')[0].split('/',2)[1]) > 12:
-            choice = 1
-            break
         
-    if choice is None:
-        choice = 0
-
+#    print("Length of Chat: {}".format(len(chat)))
+#    print('\n'.join(chat[:250]))
+    
+    # for i in range(len(chat)):
     data = {}
     temp = {}
     all_text = []
     for i in range(1,len(chat)):
-        ts = datetime.strptime(chat[i].split('-',1)[0].strip(),dateformat[choice])
+        ts = datetime.strptime(chat[i].split('-',1)[0].strip(),"%d/%m/%y, %I:%M %p")
         unprocessed_text = chat[i].split('-',1)[1].strip().split(':',1)[1]
         
         # Calculating Word Frequency of Each Chat
         words = len(unprocessed_text.split(' '))
-    #        text = preprocess(unprocessed_text)
-    #        all_text += text
+#        text = preprocess(unprocessed_text)
+#        all_text += text
         """
         RESTRUCTURE CODE SUCH THAT THE PREPROCESS FUNCTION IS CALLED THE LEAST NO OF TIMES
         """
@@ -109,7 +98,6 @@ def process(file):
         else:
             data[year]["months"][month]["days"][day]["hours"][hour]["total_words"] += words
             
-    print(data)
     bestyear = max(data,key=lambda x:data[x]["total_words"])
     
     maxvalyear = data[bestyear]["total_words"]
@@ -130,6 +118,8 @@ def process(file):
         maxvalmonth = temp2[month]["total_words"]
         bestmonths.append({"year":year,"month":month,"value":maxvalmonth})
         data[year]["maxval"] = maxvalmonth
+        
+      
     return {"data":data,"corpus":all_text,"maxval":maxvalyear,"best_year":{"year":bestyear,"value":maxvalyear},"best_months":bestmonths}
 
 
@@ -149,4 +139,7 @@ def topics(words,corpus):
     return wctopic
         
         
+
+
+
 
