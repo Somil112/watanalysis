@@ -60,14 +60,15 @@ def process(file):
     dchoice = None
     tchoice = None
     year = None
-    for i in range(200):
+    
+    for i in range(min(len(chat),200)):
         ts = chat[i].split('-',1)[0].strip().split(',')
         datecheck = int(ts[0].strip().split('/',2)[1])
         timecheck = int(ts[1].strip().split(':',1)[0])
+        year = len(ts[0].strip().split('/',2)[2].strip())
         if datecheck > 12:
-            if len(ts[0].strip().split('/',2)[2].strip()) == 4:
+            if year == 4:
                 dchoice = 3
-                year = 4
             else:
                 dchoice = 1
             break
@@ -170,5 +171,3 @@ def topics(words,corpus):
         
     return wctopic
         
-        
-
