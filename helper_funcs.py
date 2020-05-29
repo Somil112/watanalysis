@@ -54,21 +54,39 @@ def process(file):
             
     chat = clean_chat
     
-    dateformat = ['%d/%m/%y, %I:%M %p','%m/%d/%y, %I:%M %p']
-    choice = None
+    dateformat = ["%d/%m/%y", "%m/%d/%y"]
+    timeformat = ["%I:%M %p","%H:%M"]
+   
+    dchoice = None
+    tchoice = None
     for i in range(200):
-        if int(chat[i].split('-',1)[0].strip().split(',')[0].split('/',2)[1]) > 12:
-            choice = 1
+        ts = chat[i].split('-',1)[0].strip().split(',')
+        datecheck = int(ts[0].strip().split('/',2)[1])
+        timecheck = int(ts[1].strip().split(':',1)[0])
+        if datecheck > 12:
+            dchoice = 1
             break
+    if dchoice is None:
+        dchoice = 0
         
-    if choice is None:
-        choice = 0
+    for i in range(200):
+         ts = chat[i].split('-',1)[0].strip().split(',')
+         timecheck = int(ts[1].strip().split(':',1)[0])
+         if timecheck > 12:
+             tchoice = 1
+             break
+        
+    if tchoice is None:
+        tchoice = 0
+            
+         
+    dtformat = dateformat[dchoice] + ", " + timeformat[tchoice]
 
     data = {}
     temp = {}
     all_text = []
     for i in range(1,len(chat)):
-        ts = datetime.strptime(chat[i].split('-',1)[0].strip(),dateformat[choice])
+        ts = datetime.strptime(chat[i].split('-',1)[0].strip(),dtformat)
         unprocessed_text = chat[i].split('-',1)[1].strip().split(':',1)[1]
         
         words = len(unprocessed_text.split(' '))

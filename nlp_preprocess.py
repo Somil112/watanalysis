@@ -7,10 +7,10 @@ import demoji
 demoji.download_codes()
 import numpy as np
 from hinglish_stopwords import get_hinglish_stopwords
-
-
-
 import spacy
+
+
+
 nlp = spacy.load("en_core_web_sm")
 
 # Lower Casing the Data
@@ -32,7 +32,6 @@ def remove_punctuation(data):
 # Remove Apostrophe
 def remove_apostrophe(data):
     return np.char.replace(data, "'", "")
-
 
 
 # Removing Stop Words
