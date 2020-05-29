@@ -59,13 +59,12 @@ def process(file):
    
     dchoice = None
     tchoice = None
-    year = None
+    year = len(chat[0].split('-',1)[0].strip().split(',')[0].strip().split('/',2)[2].strip())
     
     for i in range(min(len(chat),200)):
         ts = chat[i].split('-',1)[0].strip().split(',')
         datecheck = int(ts[0].strip().split('/',2)[1])
         timecheck = int(ts[1].strip().split(':',1)[0])
-        year = len(ts[0].strip().split('/',2)[2].strip())
         if datecheck > 12:
             if year == 4:
                 dchoice = 3
@@ -74,10 +73,10 @@ def process(file):
             break
         
     if dchoice is None:
-        if year is None:    
-            dchoice = 0
-        else:
+        if year > 2:    
             dchoice = 2
+        else:
+            dchoice = 0
             
             
         
