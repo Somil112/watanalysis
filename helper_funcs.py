@@ -54,20 +54,31 @@ def process(file):
             
     chat = clean_chat
     
-    dateformat = ["%d/%m/%y", "%m/%d/%y"]
+    dateformat = ["%d/%m/%y", "%m/%d/%y","%d/%m/%Y","%m/%d/%Y"]
     timeformat = ["%I:%M %p","%H:%M"]
    
     dchoice = None
     tchoice = None
+    year = None
     for i in range(200):
         ts = chat[i].split('-',1)[0].strip().split(',')
         datecheck = int(ts[0].strip().split('/',2)[1])
         timecheck = int(ts[1].strip().split(':',1)[0])
         if datecheck > 12:
-            dchoice = 1
+            if len(ts[0].strip().split('/',2)[2].strip()) == 4:
+                dchoice = 3
+                year = 4
+            else:
+                dchoice = 1
             break
+        
     if dchoice is None:
-        dchoice = 0
+        if year is None:    
+            dchoice = 0
+        else:
+            dchoice = 2
+            
+            
         
     for i in range(200):
          ts = chat[i].split('-',1)[0].strip().split(',')
