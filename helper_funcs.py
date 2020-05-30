@@ -28,16 +28,17 @@ def process(file):
     temp = None
     for i in range(len(chat)):
         
-        if (re.match(r'(^\d\/\d\d\/\d\d)|(^\d\d\/\d\d\/\d\d)',chat[i]) and temp is None):
+        if (re.match(r'^\d{1,2}\/\d{1,2}\/\d{2}',chat[i]) and temp is None):
             
             
             temp = chat[i]
-        elif (re.match(r'(^\d\/\d\d\/\d\d)|(^\d\d\/\d\d\/\d\d)',chat[i]) and temp is not None):
+        elif (re.match(r'^\d{1,2}\/\d{1,2}\/\d{2}',chat[i]) and temp is not None):
             
             # Append Temp to Chat and Initialize new Temp with current Chat
             new_chat.append(temp)
             temp = chat[i]
         else:
+            print(chat[i])
             temp += chat[i]
             
     
@@ -170,3 +171,5 @@ def topics(words,corpus):
         
     return wctopic
         
+
+process(open('jbo.txt','rb'))
