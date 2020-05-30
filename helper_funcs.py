@@ -170,5 +170,3 @@ def topics(words,corpus):
         
     return wctopic
         
-
-process(open('jbo.txt','rb'))
