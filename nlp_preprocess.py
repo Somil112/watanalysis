@@ -95,5 +95,6 @@ def preprocess(data):
     data = lemmatize(data)
     data = remove_punctuation(data)
     data = demoji.replace(str(data).strip(),'')
-    data = spacy_preprocess(data)
+    data = word_tokenize(str(data))
+#    data = spacy_preprocess(data)
     return data
