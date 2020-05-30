@@ -3,6 +3,7 @@ import json
 from flask_cors import CORS
 from helper_funcs import process,topics
 from time import time
+import traceback
 
 # TOTAL TIME TAKEN is 44.45044136047363 seconds
 # TOTAL TIME TAKEN is 10.7 seconds
@@ -21,9 +22,10 @@ def upload():
     file = request.files['file']
     a = time()
     try:
+        print("RECEIVED DATA")
         data = process(file)
-    except Exception as e:
-        print(e)
+    except Exception:
+        print(traceback.format_exc())
         return Response("",status=500)
     b = time()
     print("TOTAL TIME TAKEN is {}".format(b-a))
