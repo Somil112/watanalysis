@@ -19,14 +19,13 @@ def process(file):
     chat = file.read().decode('utf-8')
     #chat = file.read().decode('utf-8')
     chat = chat.splitlines()
-    
+    print(chat[:20])
     new_chat = []
     temp = None
     for i in range(len(chat)):
         
         if (re.match(r'^\d{1,2}\/\d{1,2}\/\d{2}',chat[i]) and temp is None):
-            
-            
+    
             temp = chat[i]
         elif (re.match(r'^\d{1,2}\/\d{1,2}\/\d{2}',chat[i]) and temp is not None):
             
