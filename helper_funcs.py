@@ -38,7 +38,6 @@ def process(file):
             new_chat.append(temp)
             temp = chat[i]
         else:
-            print(chat[i])
             temp += chat[i]
             
     
