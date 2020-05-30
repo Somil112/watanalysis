@@ -19,7 +19,6 @@ def process(file):
     chat = file.read().decode('utf-8')
     #chat = file.read().decode('utf-8')
     chat = chat.splitlines()
-    print(chat[:20])
     new_chat = []
     temp = None
     for i in range(len(chat)):
