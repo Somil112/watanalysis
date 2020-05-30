@@ -1,12 +1,8 @@
 import numpy as np
-
 import re
-
 import gensim
 from datetime import datetime
-
 from nlp_preprocess import *
-
 np.random.seed(400)
 
 ## Remove Links in preprocessing
@@ -54,7 +50,6 @@ def process(file):
             
     chat = clean_chat
     
-    print('\n'.join(chat[:20]))
     dateformat = ["%d/%m/%y", "%m/%d/%y","%d/%m/%Y","%m/%d/%Y"]
     timeformat = ["%I:%M %p","%H:%M"]
    

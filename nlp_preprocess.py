@@ -1,17 +1,12 @@
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from nltk.stem import PorterStemmer
+#from nltk.stem import PorterStemmer
 from num2words import num2words
 from nltk.stem import WordNetLemmatizer 
 import demoji
 demoji.download_codes()
 import numpy as np
 from hinglish_stopwords import get_hinglish_stopwords
-import spacy
-
-
-
-nlp = spacy.load("en_core_web_sm")
 
 # Lower Casing the Data
 def convert_lower_case(data):
@@ -72,15 +67,15 @@ def lemmatize(data):
     return new_text
 
 
-def spacy_preprocess(text):
-    text = nlp(text)
-    candidate_pos = ['NOUN', 'PROPN', 'VERB']
-    jd = []
-    for token in text:
-        if token.pos_ in candidate_pos and token.is_stop is False:
-            jd.append(str(token))
-
-    return jd
+#def spacy_preprocess(text):
+#    text = nlp(text)
+#    candidate_pos = ['NOUN', 'PROPN', 'VERB']
+#    jd = []
+#    for token in text:
+#        if token.pos_ in candidate_pos and token.is_stop is False:
+#            jd.append(str(token))
+#
+#    return jd
 
 
 
