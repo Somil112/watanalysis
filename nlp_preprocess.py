@@ -49,11 +49,15 @@ def remove_stop_words(data):
 def convert_numbers(tokens):
     new = []
     for w in tokens:
-        try:
-            w = num2words(int(w))
-        except:
-            a = 0
-        new.append(w)
+        if w.isalpha():
+            new.append(w)
+#    for w in tokens:
+#        try:
+#            w = int(w)
+#        except:
+#            a = 0
+#        
+#        new.append(w)
 #    new_text = np.char.replace(new_text, "-", " ")
     return new
 
@@ -86,9 +90,9 @@ def preprocess(data):
     data = remove_apostrophe(data)
     data = remove_stop_words(data)
     data = convert_numbers(data)
-    data = remove_stop_words(data) #needed again as num2word is giving stop words 101 - one hundred and one
+#    data = remove_stop_words(data) #needed again as num2word is giving stop words 101 - one hundred and one
     data = lemmatize(data)
-    data = remove_punctuation(data)
+#    data = remove_punctuation(data)
     data = demoji.replace(str(data).strip(),'')
     data = word_tokenize(str(data))
 #    data = spacy_preprocess(data)
