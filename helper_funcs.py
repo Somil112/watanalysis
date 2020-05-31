@@ -48,6 +48,7 @@ def process(file):
             
     chat = clean_chat
     
+    print(chat[:min(len(chat),10)])
     dateformat = ["%d/%m/%y", "%m/%d/%y","%d/%m/%Y","%m/%d/%Y"]
     timeformat = ["%I:%M %p","%H:%M"]
    
@@ -74,7 +75,7 @@ def process(file):
             
             
         
-    for i in range(200):
+    for i in range(min(len(chat),200)):
          ts = chat[i].split('-',1)[0].strip().split(',')
          timecheck = int(ts[1].strip().split(':',1)[0])
          if timecheck > 12:
