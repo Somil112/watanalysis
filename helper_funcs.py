@@ -48,7 +48,6 @@ def process(file):
             
     chat = clean_chat
     
-    print(chat[:min(len(chat),10)])
     dateformat = ["%d/%m/%y", "%m/%d/%y","%d/%m/%Y","%m/%d/%Y"]
     timeformat = ["%I:%M %p","%H:%M"]
    
