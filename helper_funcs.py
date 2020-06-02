@@ -34,18 +34,19 @@ def get_ids(links):
 
 
 def get_meta(ids):
-    ids = list(set(ids))
-    DEVELOPER_KEY = 'AIzaSyCbc5RIGpaa89FD8T97TmbIkZsbzMhmT_o'
-    youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
-    chunk_length = 50
     metadata = []
-    for i in range(0,len(ids),chunk_length):  
-        results = youtube.videos().list(id=ids[i:i+chunk_length], part='snippet').execute()
-        for result in results.get('items', []):
-            metadata.append({"link":"https://youtu.be/{}".format(result['id']),
-                            "title":result['snippet']['title'],
-                            "thumbnail":result['snippet']['thumbnails']['high']})
+    if len(ids)!= 0:
+        ids = list(set(ids))
+        DEVELOPER_KEY = 'AIzaSyCbc5RIGpaa89FD8T97TmbIkZsbzMhmT_o'
+        youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
+        chunk_length = 50
         
+        for i in range(0,len(ids),chunk_length):  
+            results = youtube.videos().list(id=ids[i:i+chunk_length], part='snippet').execute()
+            for result in results.get('items', []):
+                metadata.append({"link":"https://youtu.be/{}".format(result['id']),
+                                "title":result['snippet']['title'],
+                                "thumbnail":result['snippet']['thumbnails']['high']})
         
     return metadata
 
