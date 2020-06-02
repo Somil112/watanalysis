@@ -7,6 +7,8 @@ import demoji
 demoji.download_codes()
 import numpy as np
 from hinglish_stopwords import get_hinglish_stopwords
+import re
+
 
 # Lower Casing the Data
 def convert_lower_case(data):
@@ -82,8 +84,12 @@ def lemmatize(data):
 #    return jd
 
 
+def extract_links(data):
+    regex = re.compile("(https?:\/\/\S*yout\S*)")
+    return re.findall(regex,str(data))
 
-def preprocess(data): 
+def preprocess(data):
+    data = re.sub(r'(https?:\/\/\S+)','',str(data))
     data = convert_lower_case(data)
     data = remove_media_omit(data)
     data = remove_punctuation(data) #remove comma seperately

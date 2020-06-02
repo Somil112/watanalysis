@@ -3,6 +3,9 @@ import re
 import gensim
 from datetime import datetime
 from nlp_preprocess import *
+from time import time
+from apiclient.discovery import build
+
 np.random.seed(400)
 
 ## Remove Links in preprocessing
@@ -14,6 +17,38 @@ def create_empty_hours():
         data[str(i).zfill(2)] = {"total_words":0}
         
     return data
+
+
+def get_ids(links):
+    ids = []
+    for i in range(len(links)):
+        if links[i].startswith("https://youtu.be"):
+            ids.append(links[i].split('/')[-1][:11])
+        else:
+            try:
+                ids.append(links[i].split('v=',1)[1][:11])
+            except:
+                pass
+            
+    return ids
+
+
+def get_meta(ids):
+    DEVELOPER_KEY = 'AIzaSyCbc5RIGpaa89FD8T97TmbIkZsbzMhmT_o'
+    youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
+    chunk_length = 50
+    metadata = []
+    for i in range(0,len(ids),chunk_length):  
+        results = youtube.videos().list(id=ids[i:i+chunk_length], part='snippet').execute()
+        for result in results.get('items', []):
+            metadata.append({"link":"https://youtu.be/{}".format(result['id']),
+                            "title":result['snippet']['title'],
+                            "thumbnail":result['snippet']['thumbnails']['high']})
+        
+        
+    return metadata
+
+
 
 def process(file):
     chat = file.read().decode('utf-8')
@@ -132,9 +167,12 @@ def process(file):
     
     all_text = []
     bestmonths = []
+    all_links = []
     for year in list(data.keys()):
         ywords = []
+       
         for month in data[year]["months"].keys():
+            all_links += extract_links(temp[year]["months"][month]["text"])
             mwords = preprocess(temp[year]["months"][month]["text"]) 
             data[year]["months"][month]["all_words"] = mwords
             ywords += mwords
@@ -146,7 +184,13 @@ def process(file):
         maxvalmonth = temp2[month]["total_words"]
         bestmonths.append({"year":year,"month":month,"value":maxvalmonth})
         data[year]["maxval"] = maxvalmonth
-    return {"data":data,"corpus":all_text,"maxval":maxvalyear,"best_year":{"year":bestyear,"value":maxvalyear},"best_months":bestmonths}
+    
+    ids = get_ids(all_links)
+    meta = get_meta(ids)
+    
+    
+    
+    return {"data":data,"corpus":all_text,"yt_meta":meta,"maxval":maxvalyear,"best_year":{"year":bestyear,"value":maxvalyear},"best_months":bestmonths}
 
 
 def topics(words,corpus):
@@ -164,3 +208,21 @@ def topics(words,corpus):
         
     return wctopic
         
+
+a = process(open('sasti_chat.txt','rb'))
+
+
+
+
+
+        
+    
+
+
+        
+    
+
+
+
+    
+
