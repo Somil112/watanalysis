@@ -34,6 +34,7 @@ def get_ids(links):
 
 
 def get_meta(ids):
+    ids = list(set(ids))
     DEVELOPER_KEY = 'AIzaSyCbc5RIGpaa89FD8T97TmbIkZsbzMhmT_o'
     youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
     chunk_length = 50
