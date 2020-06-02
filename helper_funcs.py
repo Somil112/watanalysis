@@ -209,8 +209,6 @@ def topics(words,corpus):
     return wctopic
         
 
-a = process(open('sasti_chat.txt','rb'))
-
 
 
 
